@@ -1,0 +1,133 @@
+#!/bin/bash
+
+# Bash colors
+txtblk='\e[0;30m' # Black - Regular
+txtred='\e[0;31m' # Red
+txtgrn='\e[0;32m' # Green
+txtylw='\e[0;33m' # Yellow
+txtblu='\e[0;34m' # Blue
+txtpur='\e[0;35m' # Purple
+txtcyn='\e[0;36m' # Cyan
+txtwht='\e[0;37m' # White
+txtrst='\e[0m'    # Text Reset
+
+# Commands
+commands[0]="clean"
+commands[1]="pipe"
+commands[2]="time"
+commands[3]="pipetime"
+commands[4]="mem"
+commands[5]="make"
+
+# File types
+files[0]="c"
+files[1]="cpp"
+files[2]="java"
+files[3]="pl"
+
+# Variables
+clean_files="*.out *.bin *~ *.o *.pyc"
+
+# Functions
+in_array() {
+    # $1 = Value
+    # $2 = Array to check
+    argument_var="${1}"
+    shift
+    argument_arr=("${@}")
+    for element in ${argument_arr[@]};
+    do
+        if [[ "$element" == $argument_var ]]
+        then
+            echo $element
+            return 0
+        fi
+    done
+    return 1
+}
+
+do_action() {
+    if [[ $1 == "clean" ]]
+    then
+        echo -e "$txtylw""Cleaning.""$txtrst"
+        rm -rfv $clean_files
+    elif [[ $1 == "make" ]]
+    then
+        echo -e "$txtylw""Placing makefile.""$txtrst"
+        cp ~/Templates/makefile "$(pwd)"
+    elif [[ $1 == "pipe" ]]
+    then
+        echo -e "$txtylw""cat $2 | ./$3""$txtrst"
+        cat "$2" | ./"$3"
+    elif [[ $1 == "time" ]]
+    then
+        echo -e "$txtylw""Timing $2""$txtrst"
+        time ./"$2"
+    elif [[ $1 == "pipetime" ]]
+    then
+        time cat "$2" | ./"$3"
+    elif [[ $1 == "mem" ]]
+    then
+        echo -e "$txtylw""Testing $2 for memory leaks.""$txtrst"
+        if which valgrind >/dev/null;
+        then
+            valgrind ./"$2"
+        else
+            echo -e "$txtred""Please install valgrind.""$txtrst"
+        fi
+    fi
+}
+
+do_compile() {
+    # $1 = File
+    # Get file name and extension
+    filename=$(basename "$1")
+    extension="${filename##*.}"
+    echo -e "$txtblu""File type: ""$txtylw""$extension""$txtrst"
+    if [[ $extension == 'c' ]]
+    then
+        gcc "$filename" -o "${filename/$extension/bin}" -std=c99
+    elif [[ $extension == 'cpp' ]]
+    then
+        g++ "$filename" -o "${filename/$extension/bin}" -std=c++0x
+    elif [[ $extension == 'java' ]]
+    then
+        javac "$filename"
+    elif [[ $extension == 'pl' ]]
+    then
+        gplc "$filename"
+    fi
+}
+
+do_help() {
+    echo -e "$txtgrn""Lazy compile script""$txtrst"
+    echo -e "$txtblu""Syntax:""$txtrst"
+    echo -e "$txtgrn""Compile a file:""$txtrst"
+    echo -e "$txtblu""compile ""$txtpur""file.{c,cpp,java,pl}""$txtrst"
+    echo -e "$txtgrn""Place a makefile in working directory:""$txtrst"
+    echo -e "$txtblu""compile ""$txtylw""make""$txtrst"
+    echo -e "$txtgrn""Clean working directory:""$txtrst"
+    echo -e "$txtblu""compile ""$txtylw""clean""$txtrst"
+    echo -e "$txtgrn""Pipe file to an executable:""$txtrst"
+    echo -e "$txtblu""compile ""$txtylw""pipe ""$txtpur""file.txt file.bin""$txtrst"
+    echo -e "$txtgrn""Time an executable:""$txtrst"
+    echo -e "$txtblu""compile ""$txtylw""time ""$txtpur""file.bin""$txtrst"
+    echo -e "$txtgrn""Time and pipe to an executable:""$txtrst"
+    echo -e "$txtblu""compile ""$txtylw"" pipetime ""$txtpur""file.txt file.bin""$txtrst"
+    echo -e "$txtgrn""Test executable for memory leaks:""$txtrst"
+    echo -e "$txtblu""compile ""$txtylw""mem ""$txtpur""file.bin""$txtrst"
+}
+
+# Test script action
+if [[ $(in_array "$1" "${commands[@]}") ]]
+then
+    # Run the appropriate action
+    echo -e "$txtblu"Action: "$txtgrn""$1""$txtrst"
+    do_action "$@"
+elif [[ $(in_array "${1##*.}" "${files[@]}") ]] 
+then
+    echo  -e "$txtblu""Compiling file: ""$txtpur""$1""$txtrst"
+    do_compile "$@"
+else
+    do_help
+fi
