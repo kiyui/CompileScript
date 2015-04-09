@@ -7,14 +7,17 @@ CFLAGS = -Wall -std=c99
 TARGET = myMain
 #OBJECTS = $(TARGET).o library1.o library.o, all the header files here
 OBJECTS = $(TARGET).o myLib.o
+#EXTRA Command line arguments
+#Syntax: make EXTRA="arg1 arg2"
+EXTRA? = ""
 
 #Do not modify
 $(TARGET) : $(OBJECTS)
-		$(CC) $(CFLAGS) $(OBJECTS) -o $(TARGET).bin
+		$(CC) $(CFLAGS) $(EXTRA) $(OBJECTS) -o $(TARGET).bin
 
 #%.c or %.cpp
 %.o : %.c
-		$(CC) $(CFLAGS) -c $<
+		$(CC) $(CFLAGS) $(EXTRA) -c $<
 
 clean:
 	rm -rvf $(OBJECTS) $(TARGET).bin *~
