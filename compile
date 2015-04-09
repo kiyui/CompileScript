@@ -28,6 +28,16 @@ files[3]="pl"
 # Variables
 clean_files="*.out *.bin *~ *.o *.pyc"
 
+# Read RC file or use defaults
+if [[ -f ~/.compilerc ]]
+then
+    source "$HOME/.compilerc"
+else
+    GCC_FLAGS="-std=c99"
+    GPP_FLAGS="-std=c++0x"
+    JAVAC_FLAGS=""
+fi
+
 # Functions
 in_array() {
     # $1 = Value
@@ -92,13 +102,16 @@ do_compile() {
     echo -e "$txtblu""File type: ""$txtylw""$extension""$txtrst"
     if [[ $extension == 'c' ]]
     then
-        gcc "$filename" -o "${filename/$extension/bin}" -std=c99
+        echo -e "$txtylw""Using flags: $GCC_FLAGS""$txtrst"
+        gcc "$filename" -o "${filename/$extension/bin}" $GCC_FLAGS
     elif [[ $extension == 'cpp' ]]
     then
-        g++ "$filename" -o "${filename/$extension/bin}" -std=c++0x
+        echo -e "$txtylw""Using flags: $GPP_FLAGS""$txtrst"
+        g++ "$filename" -o "${filename/$extension/bin}" $GPP_FLAGS
     elif [[ $extension == 'java' ]]
     then
-        javac "$filename"
+        echo -e "$txtylw""Using flags: $JAVAC_FLAGS""$txtrst"
+        javac "$filename" $JAVAC_FLAGS
     elif [[ $extension == 'pl' ]]
     then
         gplc "$filename"

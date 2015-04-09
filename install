@@ -39,4 +39,5 @@ else
     echo -e "$txtred""Adding folder to \$PATH""$txtrst"
     echo -e "$txtred""Please source ~/.bashrc or reopen bash""$txtrst"
     echo "export PATH=~/.local/share/bin:"'$PATH' >> ~/.bashrc
+    echo -e "$txtred""If you use a shell other than bash, please do this manually!""$txtrst"
 fi
