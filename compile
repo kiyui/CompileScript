@@ -53,8 +53,14 @@ do_action() {
         rm -rfv $clean_files
     elif [[ $1 == "make" ]]
     then
-        echo -e "$txtylw""Placing makefile.""$txtrst"
-        cp ~/Templates/makefile "$(pwd)"
+        if [[ -f "$(pwd)/makefile" ]]
+        then
+            echo -e "$txtylw""Running make""$txtrst"
+            make
+        else
+            echo -e "$txtylw""Placing makefile.""$txtrst"
+            cp ~/Templates/makefile "$(pwd)"
+        fi
     elif [[ $1 == "pipe" ]]
     then
         echo -e "$txtylw""cat $2 | ./$3""$txtrst"
