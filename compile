@@ -1,4 +1,5 @@
 #!/bin/bash
+# Stop judging, I just need to learn bash!
 
 # Bash colors
 txtblk='\e[0;30m' # Black - Regular
@@ -18,12 +19,14 @@ commands[2]="time"
 commands[3]="pipetime"
 commands[4]="mem"
 commands[5]="make"
+commands[6]="makeline"
 
 # File types
 files[0]="c"
 files[1]="cpp"
 files[2]="java"
-files[3]="pl"
+files[3]="rs"
+files[4]="pl"
 
 # Variables
 clean_files="*.out *.bin *~ *.o *.pyc"
@@ -36,6 +39,7 @@ else
     GCC_FLAGS="-std=c99"
     GPP_FLAGS="-std=c++0x"
     JAVAC_FLAGS=""
+    RUSTC_FLAGS=""
 fi
 
 # Functions
@@ -71,6 +75,15 @@ do_action() {
             echo -e "$txtylw""Placing makefile.""$txtrst"
             cp ~/Templates/makefile "$(pwd)"
         fi
+    elif [[ $1 == "makeline" ]]
+    then
+        for header in "$(pwd)/*.h"
+        do
+            object=$(basename "$header")
+            echo -e "$txtylw""Libraries:""$txtrst"
+            echo ${object/.h/.o}
+            echo -e "$txtred""Add to makefile.""$txtrst"
+        done
     elif [[ $1 == "pipe" ]]
     then
         echo -e "$txtylw""cat $2 | ./$3""$txtrst"
@@ -112,6 +125,10 @@ do_compile() {
     then
         echo -e "$txtylw""Using flags: $JAVAC_FLAGS""$txtrst"
         javac "$filename" $JAVAC_FLAGS
+    elif [[ $extension == 'rs' ]]
+    then
+        echo -e "$txtylw""Using flags: $RUSTC_FLAGS""$txtrst"
+        rustc "$filename" $RUSTC_FLAGS
     elif [[ $extension == 'pl' ]]
     then
         gplc "$filename"
@@ -125,6 +142,8 @@ do_help() {
     echo -e "$txtblu""compile ""$txtpur""file.{c,cpp,java,pl}""$txtrst"
     echo -e "$txtgrn""Place a makefile in working directory:""$txtrst"
     echo -e "$txtblu""compile ""$txtylw""make""$txtrst"
+    echo -e "$txtgrn""List all object files to add to makefile:""$txtrst"
+    echo -e "$txtblu""compile ""$txtylw""makeline""$txtrst"
     echo -e "$txtgrn""Clean working directory:""$txtrst"
     echo -e "$txtblu""compile ""$txtylw""clean""$txtrst"
     echo -e "$txtgrn""Pipe file to an executable:""$txtrst"
