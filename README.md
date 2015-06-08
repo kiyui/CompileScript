@@ -36,10 +36,20 @@ Users can set their own compile flags for various languages by creating the file
 
 ```
 #CompileScript config file
+# GCC compilation flags
 GCC_FLAGS="-std=c99"
-GPP_FLAGS=""
+# G++ compilation flags
+GPP_FLAGS="-std=c++11"
+# JAVAC compilation flags
 JAVAC_FLAGS=""
+# RUSTC compilation flags
 RUSTC_FLAGS=""
+# File types for cleaning mode
+clean_files="*.out *.bin *~ *.o *.pyc"
+# File types for recursive cleaning mode
+vlean_files="*~"
+# Recursive cleaning mode rm options
+vrm_options="-i"
 ```
 
 

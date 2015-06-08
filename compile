@@ -29,18 +29,19 @@ files[3]="rs"
 files[4]="pl"
 
 # Variables
-clean_files="*.out *.bin *~ *.o *.pyc"
-
 # Read RC file or use defaults
 if [[ -f ~/.compilerc ]]
 then
     source "$HOME/.compilerc"
-else
-    GCC_FLAGS="-std=c99"
-    GPP_FLAGS="-std=c++0x"
-    JAVAC_FLAGS=""
-    RUSTC_FLAGS=""
 fi
+# Set unset variables to default
+[[ -z $GCC_FLAGS ]] && GCC_FLAGS="-std=c99"
+[[ -z $GPP_FLAGS ]] && GPP_FLAGS="-std=c++0x"
+[[ -z $JAVAC_FLAGS ]] && JAVAC_FLAGS=""
+[[ -z $RUSTC_FLAGS ]] && RUSTC_FLAGS=""
+[[ -z $clean_files ]] && clean_files="*.out *.bin *~ *.o *.pyc"
+[[ -z $vlean_files ]] && vlean_files="*~"
+[[ -z $vrm_options ]] && vrm_options="-i"
 
 # Functions
 in_array() {
@@ -63,8 +64,17 @@ in_array() {
 do_action() {
     if [[ $1 == "clean" ]]
     then
-        echo -e "$txtylw""Cleaning.""$txtrst"
-        rm -rfv $clean_files
+        if [[ $2 == "-r" ]]
+        then
+            for clean_type in $vlean_files
+            do
+                echo $clean_type
+                find "$(pwd)" -name "$clean_type" -exec rm $vrm_options {} \;
+            done
+        else
+            echo -e "$txtylw""Cleaning.""$txtrst"
+            rm -rfv $clean_files
+        fi
     elif [[ $1 == "make" ]]
     then
         if [[ -f "$(pwd)/makefile" ]]
@@ -146,6 +156,8 @@ do_help() {
     echo -e "$txtblu""compile ""$txtylw""makeline""$txtrst"
     echo -e "$txtgrn""Clean working directory:""$txtrst"
     echo -e "$txtblu""compile ""$txtylw""clean""$txtrst"
+    echo -e "$txtgrn""Clean working directory recursively:""$txtrst"
+    echo -e "$txtblu""compile ""$txtylw""clean -r""$txtrst"
     echo -e "$txtgrn""Pipe file to an executable:""$txtrst"
     echo -e "$txtblu""compile ""$txtylw""pipe ""$txtpur""file.txt file.bin""$txtrst"
     echo -e "$txtgrn""Time an executable:""$txtrst"
