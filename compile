@@ -110,7 +110,7 @@ do_action() {
         echo -e "$txtylw""Testing $2 for memory leaks.""$txtrst"
         if which valgrind >/dev/null;
         then
-            valgrind ./"$2"
+            valgrind ./"$2" ${@:3}
         else
             echo -e "$txtred""Please install valgrind.""$txtrst"
         fi
