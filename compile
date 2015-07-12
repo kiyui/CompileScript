@@ -62,8 +62,10 @@ in_array() {
 }
 
 do_action() {
+    # Check for "clean" command
     if [[ $1 == "clean" ]]
     then
+        # Check if recursive cleaning is enabled
         if [[ $2 == "-r" ]]
         then
             for clean_type in $vlean_files
@@ -71,22 +73,28 @@ do_action() {
                 echo $clean_type
                 find "$(pwd)" -name "$clean_type" -exec rm $vrm_options {} \;
             done
+        # Default to non-recursive cleaning
         else
             echo -e "$txtylw""Cleaning.""$txtrst"
             rm -rfv $clean_files
         fi
+    # Check for "make" command
     elif [[ $1 == "make" ]]
     then
+        # Compile existing makefile if it exists
         if [[ -f "$(pwd)/makefile" ]]
         then
             echo -e "$txtylw""Running make""$txtrst"
             make
+        # Defaults to placing a makefile in the current directory
         else
             echo -e "$txtylw""Placing makefile.""$txtrst"
             cp ~/Templates/makefile "$(pwd)"
         fi
+    # Check for "makeline" command
     elif [[ $1 == "makeline" ]]
     then
+        # Iterate all ".h" files and print then as ".o"
         for header in "$(pwd)/*.h"
         do
             object=$(basename "$header")
@@ -94,20 +102,25 @@ do_action() {
             echo ${object/.h/.o}
             echo -e "$txtred""Add to makefile.""$txtrst"
         done
+    # Check for "pip" command
     elif [[ $1 == "pipe" ]]
     then
         echo -e "$txtylw""cat $2 | ./$3""$txtrst"
         cat "$2" | ./"$3"
+    # Check for "time" command
     elif [[ $1 == "time" ]]
     then
         echo -e "$txtylw""Timing $2""$txtrst"
         time ./"$2"
+    # Check for "pipetime" command
     elif [[ $1 == "pipetime" ]]
     then
         time cat "$2" | ./"$3"
+    # Check for "mem" command
     elif [[ $1 == "mem" ]]
     then
         echo -e "$txtylw""Testing $2 for memory leaks.""$txtrst"
+        # Check if "valgrind" is installed
         if which valgrind >/dev/null;
         then
             valgrind ./"$2" ${@:3}
