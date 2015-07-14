@@ -132,6 +132,17 @@ do_action() {
     elif [[ $1 == "watch" ]]
     then
         # Watch command to be added
+        # Check if "inotify" exists
+        if which inotifywait >/dev/null;
+        then
+            while true; do
+                change=$(inotifywait -e close_write,moved_to,create .)
+                change=${change#./ * }
+                if [ "$change" ]; then echo "Change made"; fi
+            done
+        else
+            echo -e "$txtred""Please install inotify-tools.""$txtrst"
+        fi
     fi
 }
 
