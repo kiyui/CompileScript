@@ -62,6 +62,34 @@ in_array() {
     return 1
 }
 
+do_compile() {
+    # $1 = File
+    # Get file name and extension
+    filename=$(basename "$1")
+    extension="${filename##*.}"
+    echo -e "$txtblu""File type: ""$txtylw""$extension""$txtrst"
+    if [[ $extension == 'c' ]]
+    then
+        echo -e "$txtylw""Using flags: $GCC_FLAGS""$txtrst"
+        gcc "$filename" -o "${filename/$extension/bin}" $GCC_FLAGS
+    elif [[ $extension == 'cpp' ]]
+    then
+        echo -e "$txtylw""Using flags: $GPP_FLAGS""$txtrst"
+        g++ "$filename" -o "${filename/$extension/bin}" $GPP_FLAGS
+    elif [[ $extension == 'java' ]]
+    then
+        echo -e "$txtylw""Using flags: $JAVAC_FLAGS""$txtrst"
+        javac "$filename" $JAVAC_FLAGS
+    elif [[ $extension == 'rs' ]]
+    then
+        echo -e "$txtylw""Using flags: $RUSTC_FLAGS""$txtrst"
+        rustc "$filename" $RUSTC_FLAGS
+    elif [[ $extension == 'pl' ]]
+    then
+        gplc "$filename"
+    fi
+}
+
 do_action() {
     # Check for "clean" command
     if [[ $1 == "clean" ]]
@@ -138,39 +166,22 @@ do_action() {
             while true; do
                 change=$(inotifywait -e close_write,moved_to,create .)
                 change=${change#./ * }
-                if [ "$change" ]; then echo "Change made"; fi
+                if [[ $2 == "make" ]]
+                then
+                    make
+                elif [[ $2 == "run" ]]
+                then
+                    ${@:3}
+                else
+                    if [[ "$change" == "$3" ]]
+                    then
+                    do_compile $3
+                    fi
+                fi
             done
         else
             echo -e "$txtred""Please install inotify-tools.""$txtrst"
         fi
-    fi
-}
-
-do_compile() {
-    # $1 = File
-    # Get file name and extension
-    filename=$(basename "$1")
-    extension="${filename##*.}"
-    echo -e "$txtblu""File type: ""$txtylw""$extension""$txtrst"
-    if [[ $extension == 'c' ]]
-    then
-        echo -e "$txtylw""Using flags: $GCC_FLAGS""$txtrst"
-        gcc "$filename" -o "${filename/$extension/bin}" $GCC_FLAGS
-    elif [[ $extension == 'cpp' ]]
-    then
-        echo -e "$txtylw""Using flags: $GPP_FLAGS""$txtrst"
-        g++ "$filename" -o "${filename/$extension/bin}" $GPP_FLAGS
-    elif [[ $extension == 'java' ]]
-    then
-        echo -e "$txtylw""Using flags: $JAVAC_FLAGS""$txtrst"
-        javac "$filename" $JAVAC_FLAGS
-    elif [[ $extension == 'rs' ]]
-    then
-        echo -e "$txtylw""Using flags: $RUSTC_FLAGS""$txtrst"
-        rustc "$filename" $RUSTC_FLAGS
-    elif [[ $extension == 'pl' ]]
-    then
-        gplc "$filename"
     fi
 }
 
