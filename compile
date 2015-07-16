@@ -173,9 +173,9 @@ do_action() {
                 then
                     ${@:3}
                 else
-                    if [[ "$change" == "$3" ]]
+                    if [[ "$change" == "$2" ]]
                     then
-                    do_compile $3
+                    do_compile $2
                     fi
                 fi
             done
