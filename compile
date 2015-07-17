@@ -164,7 +164,7 @@ do_action() {
         if which inotifywait >/dev/null;
         then
             while true; do
-                change=$(inotifywait -e close_write,moved_to,create .)
+                change=$(inotifywait -e close_write,moved_to,create . 2> /dev/null)
                 change=${change#./ * }
                 if [[ $2 == "make" ]]
                 then
