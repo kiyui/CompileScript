@@ -173,9 +173,12 @@ do_action() {
                 then
                     ${@:3}
                 else
-                    if [[ "$change" == "$2" ]]
+                    if [[ "$change" == "$2" && "$3" == "then" ]]
                     then
-                    do_compile $2
+                        ${@:4}
+                    elif [[ "$change" == "$2" ]]
+                    then
+                        do_compile $2
                     fi
                 fi
             done
