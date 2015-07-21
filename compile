@@ -206,9 +206,17 @@ do_help() {
     echo -e "$txtgrn""Time an executable:""$txtrst"
     echo -e "$txtblu""compile ""$txtylw""time ""$txtpur""file.bin""$txtrst"
     echo -e "$txtgrn""Time and pipe to an executable:""$txtrst"
-    echo -e "$txtblu""compile ""$txtylw"" pipetime ""$txtpur""file.txt file.bin""$txtrst"
+    echo -e "$txtblu""compile ""$txtylw""pipetime ""$txtpur""file.txt file.bin""$txtrst"
     echo -e "$txtgrn""Test executable for memory leaks:""$txtrst"
     echo -e "$txtblu""compile ""$txtylw""mem ""$txtpur""file.bin""$txtrst"
+    echo -e "$txtgrn""Watch directory for changes and run make""$txtrst"
+    echo -e "$txtblu""compile ""$txtylw""watch ""$txtpur""make""$txtrst"
+    echo -e "$txtgrn""Watch directory for changes and run commands""$txtrst"
+    echo -e "$txtblu""compile ""$txtylw""watch ""$txtpur""\"your commands\"""$txtrst"
+    echo -e "$txtgrn""Watch file for changes and run commands""$txtrst"
+    echo -e "$txtblu""compile ""$txtylw""watch ""$txtpur""file \"your commands\"""$txtrst"
+    echo -e "$txtgrn""Watch file for changes and compile""$txtrst"
+    echo -e "$txtblu""compile ""$txtylw""watch ""$txtpur""file""$txtrst"
 }
 
 # Test script action

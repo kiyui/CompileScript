@@ -20,14 +20,24 @@ List all object files to add to makefile:
 > compile makeline
 Clean working directory:
 > compile clean
+Clean working directory recursively:
+> compile clean -r
 Pipe file to an executable:
 > compile pipe file.txt file.bin
 Time an executable:
 > compile time file.bin
 Time and pipe to an executable:
-> compile  pipetime file.txt file.bin
+> compile pipetime file.txt file.bin
 Test executable for memory leaks:
 > compile mem file.bin
+Watch directory for changes and run make
+> compile watch make
+Watch directory for changes and run commands
+> compile watch "your commands"
+Watch file for changes and run commands
+> compile watch file "your commands"
+Watch file for changes and compile
+> compile watch file
 ```
 
 **Configuration**
