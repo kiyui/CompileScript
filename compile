@@ -212,7 +212,7 @@ do_help() {
     echo -e "$txtgrn""Watch directory for changes and run make""$txtrst"
     echo -e "$txtblu""compile ""$txtylw""watch ""$txtpur""make""$txtrst"
     echo -e "$txtgrn""Watch directory for changes and run commands""$txtrst"
-    echo -e "$txtblu""compile ""$txtylw""watch ""$txtpur""\"your commands\"""$txtrst"
+    echo -e "$txtblu""compile ""$txtylw""watch ""$txtpur""then \"your commands\"""$txtrst"
     echo -e "$txtgrn""Watch file for changes and run commands""$txtrst"
     echo -e "$txtblu""compile ""$txtylw""watch ""$txtpur""file \"your commands\"""$txtrst"
     echo -e "$txtgrn""Watch file for changes and compile""$txtrst"

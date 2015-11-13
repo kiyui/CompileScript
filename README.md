@@ -35,7 +35,7 @@ Watch directory for changes and run make
 Watch directory for changes and run commands
 > compile watch "your commands"
 Watch file for changes and run commands
-> compile watch file "your commands"
+> compile watch file then "your commands"
 Watch file for changes and compile
 > compile watch file
 ```
