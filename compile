@@ -214,7 +214,7 @@ do_help() {
     echo -e "$txtgrn""Watch directory for changes and run commands""$txtrst"
     echo -e "$txtblu""compile ""$txtylw""watch ""$txtpur""then \"your commands\"""$txtrst"
     echo -e "$txtgrn""Watch file for changes and run commands""$txtrst"
-    echo -e "$txtblu""compile ""$txtylw""watch ""$txtpur""file \"your commands\"""$txtrst"
+    echo -e "$txtblu""compile ""$txtylw""watch ""$txtpur""file then \"your commands\"""$txtrst"
     echo -e "$txtgrn""Watch file for changes and compile""$txtrst"
     echo -e "$txtblu""compile ""$txtylw""watch ""$txtpur""file""$txtrst"
 }
